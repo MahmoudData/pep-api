@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+*.pyo
+*.env
+*.docx
+.DS_Store
+.idea/
+.vscode/
+
+# Exclude environment folders
+venv/
+ENV/
+
+# Exclude test and coverage files
+.coverage
+htmlcov/
+
+# Exclude log files
+*.log
+
+# Exclude OS files
+Thumbs.db
+
