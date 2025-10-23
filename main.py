@@ -38,11 +38,9 @@ async def health():
 async def generate_pep(request: Request):
     try:
         data = await request.json()
-        # Nom du fichier simple
         numero_projet = data.get('numero_projet', 'SANS_NUM')
         output_filename = f"PEP_{numero_projet}.docx"
         output_path = Path(output_filename)
-        # Génération
         success = generate_pep_document(
             template_path=str(TEMPLATE_PATH),
             data=data,
@@ -50,14 +48,11 @@ async def generate_pep(request: Request):
         )
         if not success:
             raise HTTPException(status_code=500, detail="Erreur génération")
-        # URL de téléchargement
         base_url = str(request.base_url).rstrip('/')
+        download_url = f"{base_url}/download/{output_filename}"
         return {
-            "status": "success",
             "message": "Document PEP généré avec succès",
-            "filename": output_filename,
-            "projet": numero_projet,
-            "client": data.get('client', 'N/A')
+            "url": download_url
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
