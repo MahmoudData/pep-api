@@ -26,8 +26,6 @@ def get_nested_value(data: Dict[str, Any], key_path: str) -> str:
 
 
 def generate_pep_document(template_path: str, data: Dict[str, Any], output_path: str) -> bool:
-    # Extraction directe du champ 'body' du format n8n
-    data = data["body"]["body"]
     placeholder_mapping = {
         "{{GENERALITES}}": "descriptif_projet.generalites",
         "{{JUSTIFICATION}}": "descriptif_projet.justification",
@@ -56,11 +54,11 @@ def generate_pep_document(template_path: str, data: Dict[str, Any], output_path:
         "{{GESTION_DE_DOCUMENTATION}}": "gestion_projet.gestion_de_documentation",
         "{{CERTIFICATION_BUREAU_DE_CONTROLE}}": "certification_bureau_de_controle",
         "{{ACTIVITES_ET_DONNEES_STRATEGIQUES}}": "ingenierie.activites_et_donnees_strategiques",
-        "{{LISTE_DE_LIVRABLES _ET_ACTIVITES_REPARTITION_DES_ROLES_ET_RESPONSABILITES}}": "ingenierie.liste_de_livrables_et_activites_repartition_des_roles_et_responsabilites",
+        "{{LISTE_DE_LIVRABLES_ET_ACTIVITES_REPARTITION_DES_ROLES_ET_RESPONSABILITES}}": "ingenierie.liste_de_livrables_et_activites_repartition_des_roles_et_responsabilites",
         "{{EXCLUSIONS}}": "ingenierie.exclusions",
         "{{INTERFACES_ET_LIMITES_DES_PRESTATIONS}}": "ingenierie.interfaces_et_limites_des_prestations",
-        "{{BATTERRIE _LIMITES_TECHNIQUES}}": "ingenierie.batterie_limites_techniques",
-        "{{INTERFACE _DANS_ROLES_ET_REPONSABILITES}}": "ingenierie.interface_dans_roles_et_responsabilites",
+        "{{BATTERRIE_LIMITES_TECHNIQUES}}": "ingenierie.batterie_limites_techniques",
+        "{{INTERFACE_DANS_ROLES_ET_REPONSABILITES}}": "ingenierie.interface_dans_roles_et_responsabilites",
         "{{PLANNING_DES_ETUDES}}": "ingenierie.planning_des_etudes",
         "{{MAQUETTE_3D_CAD_OUTILS_ET_LOGICIELS}}": "ingenierie.maquette_3d_cad_outils_et_logiciels",
         "{{RISQUES_INGENIERIE_IDENTIFIES_ET_PLAN_DE_MIGRATION}}": "ingenierie.risques_ingenierie_identifies_et_plan_de_mitigation",
@@ -69,12 +67,12 @@ def generate_pep_document(template_path: str, data: Dict[str, Any], output_path:
         "{{APPROVISONNEMENTS_PROCUREMENT}}": "approvisionnements_procurement.description_generale",
         "{{TUYAUTERIES}}": "approvisionnements_procurement.tuyauteries",
         "{{INSTRUMENTATIONS}}": "approvisionnements_procurement.instrumentations",
-        "{{AUTOMATISATISMES_SECURITE}}": "approvisionnements_procurement.automatismes_securite",
+        "{{AUTOMATISMES_SECURITE}}": "approvisionnements_procurement.automatismes_securite",
         "{{MECANIQUES_ET_EQUIPEMENTS}}": "approvisionnements_procurement.mecaniques_et_equipements",
         "{{ELECTRICITE}}": "approvisionnements_procurement.electricite",
         "{{GENIE_CIVIL_STRUCTURE}}": "approvisionnements_procurement.genie_civil_structure",
         "{{EXPEDITING_ET_RECEPTION_MATERIEL}}": "approvisionnements_procurement.expediting_et_reception_materiel.description",
-        "{{RECEPTION_DU _MATERIEL}}": "approvisionnements_procurement.expediting_et_reception_materiel.reception_du_materiel",
+        "{{RECEPTION_DU_MATERIEL}}": "approvisionnements_procurement.expediting_et_reception_materiel.reception_du_materiel",
         "{{FACTORY_ACCEPTANCE_TEST}}": "approvisionnements_procurement.expediting_et_reception_materiel.factory_acceptance_test",
         "{{SITE_ACCEPTANCE_TEST}}": "approvisionnements_procurement.expediting_et_reception_materiel.site_acceptance_test",
         "{{TEST_DE_PERFORMANCE_GARANTIES}}": "approvisionnements_procurement.expediting_et_reception_materiel.test_de_performance_garanties",
