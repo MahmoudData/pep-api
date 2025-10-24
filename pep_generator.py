@@ -26,6 +26,8 @@ def get_nested_value(data: Dict[str, Any], key_path: str) -> str:
 
 
 def generate_pep_document(template_path: str, data: Dict[str, Any], output_path: str) -> bool:
+    # Extraction directe du champ 'body' du format n8n
+    data = data[0]["body"]
     placeholder_mapping = {
         "{{GENERALITES}}": "descriptif_projet.generalites",
         "{{JUSTIFICATION}}": "descriptif_projet.justification",
