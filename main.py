@@ -51,8 +51,7 @@ async def generate_pep(request: Request):
         base_url = str(request.base_url).rstrip('/')
         download_url = f"{base_url}/download/{output_filename}"
         return {
-            "message": "Document PEP généré avec succès",
-            "url": download_url
+            "message": f"Document PEP généré avec succès ! Téléchargez-le ici : {download_url}",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
