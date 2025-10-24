@@ -1,14 +1,12 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime
 from pathlib import Path
 from pep_generator import generate_pep_document
+import time
 
-# Initialisation
 app = FastAPI(title="PEP Generator API")
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,7 +15,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configuration
 TEMPLATE_PATH = Path("templates/PEP_type_template.docx")
 
 
@@ -34,37 +31,46 @@ async def health():
     }
 
 
+def cleanup_file(file_path: Path, delay: int = 60):
+    """Supprime le fichier après un délai"""
+    time.sleep(delay)
+    if file_path.exists():
+        file_path.unlink()
+
+
 @app.post("/generate-PEP")
-async def generate_pep(request: Request):
+async def generate_pep(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
         numero_projet = data.get('numero_projet', 'SANS_NUM')
+        
+        # Créer un dossier temporaire
+        output_dir = Path("generated_files")
+        output_dir.mkdir(exist_ok=True)
+        
         output_filename = f"PEP_{numero_projet}.docx"
-        output_path = Path(output_filename)
+        output_path = output_dir / output_filename
+        
+        # Générer le document
         success = generate_pep_document(
             template_path=str(TEMPLATE_PATH),
             data=data,
             output_path=str(output_path)
         )
-        if not success:
+        
+        if not success or not output_path.exists():
             raise HTTPException(status_code=500, detail="Erreur génération")
-        base_url = str(request.base_url).rstrip('/')
-        download_url = f"{base_url}/download/{output_filename}"
-        return {
-            "message": f"Document PEP généré avec succès ! Téléchargez-le ici : {download_url}",
-        }
+        
+        # Nettoyer le fichier après envoi
+        background_tasks.add_task(cleanup_file, output_path)
+        
+        # Retourner le fichier directement
+        return FileResponse(
+            path=str(output_path),
+            filename=output_filename,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/download/{filename}")
-async def download_file(filename: str):
-    file_path = Path(filename)
-    
-    if not file_path.exists():
-        raise HTTPException(status_code=404, detail="Fichier non trouvé")
-    
-    return FileResponse(
-        path=str(file_path),
-        filename=filename,
-        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    )
